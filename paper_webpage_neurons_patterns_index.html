@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Neurons, Patterns, and the Beautiful Illusion of Randomness — Tarun Kumar Mahato</title>
+  <meta name="description" content="An essay with small experiments, light equations, and references on why thoughts feel random but are structured recombinations — by Tarun Kumar Mahato." />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Neurons, Patterns, and the Beautiful Illusion of Randomness" />
+  <meta property="og:description" content="A semi-formal essay with experiments, equations, and references by Tarun Kumar Mahato." />
+  <meta property="og:image" content="" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Color scheme + fonts -->
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    :root{
+      --bg: #0b0c10;
+      --panel: #111217;
+      --ink: #e6e6e6;
+      --muted: #b6b8c2;
+      --accent: #8ec5ff;
+      --ring: rgba(142,197,255,0.35);
+      --maxw: 78ch;
+    }
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#ffffff; --panel:#f7f7fb; --ink:#0b0c10; --muted:#4b4f5c; --accent:#0b6bcb; --ring:rgba(11,107,203,0.15);} }
+    *{ box-sizing:border-box }
+    html{ scroll-behavior:smooth }
+    body{ margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; background:var(--bg); color:var(--ink); line-height:1.65 }
+    a{ color:var(--accent); text-decoration:none }
+    a:hover{ text-decoration:underline }
+    header.hero{ position:sticky; top:0; z-index:50; backdrop-filter:saturate(1.3) blur(10px); background:color-mix(in oklab, var(--bg) 85%, transparent); border-bottom:1px solid color-mix(in oklab, var(--ink) 15%, transparent) }
+    .wrap{ max-width:1100px; margin-inline:auto; padding-inline: clamp(1rem, 2vw, 1.25rem) }
+    .hero .inner{ display:flex; gap:1rem; align-items:center; justify-content:space-between; padding-block: .75rem }
+    .brand{ display:flex; align-items:center; gap:.6rem; font-weight:700; letter-spacing:.2px }
+    .brand .dot{ width:10px; height:10px; border-radius:50%; background:radial-gradient(circle at 30% 30%, #c0ffd7, #7affb0 40%, #2fbf71 75%) }
+    nav.tools{ display:flex; gap:.5rem; align-items:center }
+    button.icon, a.icon{ background:transparent; border:1px solid color-mix(in oklab, var(--ink) 15%, transparent); color:var(--ink); padding:.55rem .7rem; border-radius:12px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center }
+    button.icon:focus, a.icon:focus{ outline:2px solid var(--ring); outline-offset:2px }
+
+    .layout{ display:grid; grid-template-columns: 280px 1fr; gap:2rem; padding-block: 1.2rem }
+    @media (max-width: 960px){ .layout{ grid-template-columns: 1fr } }
+
+    aside.toc{ position: sticky; top: 66px; align-self: start; border:1px solid color-mix(in oklab, var(--ink) 12%, transparent); background:var(--panel); border-radius:16px; padding:1rem; max-height: calc(100dvh - 88px); overflow:auto }
+    aside.toc h2{ font-size:1rem; margin:.2rem 0 .6rem 0; color:var(--muted) }
+    .toc a{ display:block; padding:.25rem .25rem; border-radius:8px; color:var(--ink) }
+    .toc a small{ color:var(--muted) }
+    .toc a.active, .toc a:hover{ background: color-mix(in oklab, var(--accent) 14%, transparent) }
+
+    main article{ max-width:var(--maxw); margin-inline:auto }
+    h1{ font-size: clamp(1.6rem, 2vw + 1rem, 2.15rem); line-height:1.15; margin: .2rem 0 .25rem 0 }
+    .subtitle{ color:var(--muted); margin:0 0 1rem 0 }
+    .meta{ color:var(--muted); font-size:.95rem; display:flex; gap:.75rem; flex-wrap:wrap }
+    .card{ background: var(--panel); border:1px solid color-mix(in oklab, var(--ink) 12%, transparent); border-radius:16px; padding:1rem; }
+    .lead{ font-size:1.05rem }
+    hr.sep{ border:0; height:1px; background: color-mix(in oklab, var(--ink) 12%, transparent); margin:1.25rem 0 }
+    h2{ margin-top:2.2rem; margin-bottom:.35rem; font-size:1.35rem }
+    h3{ margin-top:1.4rem; margin-bottom:.2rem; font-size:1.08rem }
+    blockquote{ margin:1rem 0; padding: .1rem .9rem; border-left: 3px solid var(--accent); color:var(--muted) }
+    code, kbd{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; background: color-mix(in oklab, var(--panel) 85%, var(--ink)); padding:.1rem .35rem; border-radius:6px; font-size:.95em }
+    pre{ overflow:auto; background:var(--panel); padding:1rem; border-radius:14px; border:1px solid color-mix(in oklab, var(--ink) 12%, transparent) }
+    .callout{ border-left:4px solid var(--accent); background: color-mix(in oklab, var(--panel) 92%, var(--accent)); padding:.75rem 1rem; border-radius:10px }
+    .refs ol{ padding-left:1.1rem }
+    .footer{ margin-top:2rem; padding:1.25rem; border-top:1px solid color-mix(in oklab, var(--ink) 12%, transparent); color:var(--muted); font-size:.95rem }
+
+    .floating-top{ position:fixed; right:18px; bottom:18px; z-index:60 }
+    .floating-top a{ display:inline-block; padding:.6rem .8rem; background:var(--panel); border:1px solid color-mix(in oklab, var(--ink) 12%, transparent); border-radius:12px }
+
+    @media print{
+      header.hero, .floating-top, aside.toc, nav.tools{ display:none !important }
+      body{ background:#fff; color:#000 }
+      a{ color:#000; text-decoration: none }
+      main article{ max-width:none }
+    }
+
+    /* Inline, non-disruptive test log (only visible to developers) */
+    #test-log{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:.85rem; color:var(--muted); white-space:pre-wrap }
+    details.testbox{ margin-top:1rem }
+  </style>
+
+  <!-- MathJax for inline equations -->
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$','$'],['\\(','\\)']] } };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap inner">
+      <div class="brand" aria-label="Site brand">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Tarun · Research Notes</span>
+      </div>
+      <nav class="tools">
+        <button class="icon" id="themeBtn" title="Toggle theme" aria-label="Toggle theme">☾</button>
+        <a class="icon" href="#top" title="Back to top" style="display:inline-flex;align-items:center">↑</a>
+        <button class="icon" onclick="window.print()" title="Print or save as PDF">🖨️</button>
+        <a class="icon" id="downloadPdf" href="paper.pdf" download title="Download PDF (add your file as paper.pdf)">⬇︎</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrap layout" id="top">
+    <aside class="toc" id="toc">
+      <h2>On this page</h2>
+      <nav id="tocList"></nav>
+      <hr class="sep"/>
+      <div class="card" style="font-size:.95rem">
+        <strong>Share</strong><br>
+        <a id="shareBtn" href="#" role="button" title="Copy or share this page link">Copy link</a>
+        <div id="copyFallback" style="display:none; margin-top:.5rem">
+          <input id="copyInput" type="text" readonly aria-label="Page URL" style="width:100%; padding:.4rem .5rem; border-radius:8px; border:1px solid color-mix(in oklab, var(--ink) 12%, transparent); background:var(--panel); color:var(--ink)" />
+          <small class="muted">Press <kbd>Ctrl/⌘</kbd> + <kbd>C</kbd> to copy</small>
+        </div>
+      </div>
+
+      <details class="testbox">
+        <summary>Developer self-tests</summary>
+        <div id="test-log" aria-live="polite">Running…</div>
+      </details>
+    </aside>
+
+    <main>
+      <article id="article">
+        <header style="margin-bottom:1rem">
+          <h1>Neurons, Patterns, and the Beautiful Illusion of Randomness</h1>
+          <p class="subtitle">A semi-formal essay with experiments you can try, a few equations, and a selective bibliography</p>
+          <div class="meta">By <strong>Tarun Kumar Mahato</strong> · Last updated: 12 Aug 2025 · ~12 minute read</div>
+        </header>
+
+        <p class="lead card">Your thoughts feel spontaneous. Under the hood they are structured walks through memory. Brains are generative models that predict the next moment, then update when surprised. What feels random is usually a recombination of learned features with a touch of noise. Mechanism doesn’t erase meaning; it explains how meaning survives. AI mirrors this pattern logic—so if you understand the mechanism you can steer it, which is the closest thing we have to free will.</p>
+
+        <hr class="sep" />
+
+        <h2 id="why-this-matters">1. Why this matters</h2>
+        <p>You think of a purple penguin, or an impossible fruit that tastes like pizza. It feels like a spark from nowhere. Yet the spark usually lands on dry tinder that your nervous system has been piling up for years. This is a good thing. Without well structured memory you would not be able to think at all. The live question is simple: how much of everyday creativity is recombination of stored parts, and how much is true novelty? The honest answer is that most of it is recombination, sometimes guided by small doses of noise. That is already enough to look like magic from the inside.</p>
+        <blockquote><strong>Key idea</strong>: A thought is a path through a graph of memories, not a bolt from the void.</blockquote>
+
+        <h2 id="brain-by-numbers">2. The brain by the numbers (finite but astronomical)</h2>
+        <ul>
+          <li>Roughly <strong>86 billion</strong> neurons, each with thousands of synapses.</li>
+          <li>Synapses change their strengths with experience.</li>
+          <li>The whole network has small‑world structure. Short paths exist between distant regions, which makes association fast and surprisingly rich.</li>
+        </ul>
+        <p>Even absurdly large is still finite. That matters. A finite system cannot produce unbounded novelty. It can produce enormous variability by <strong>recombining</strong> elements it already contains.</p>
+
+        <h2 id="what-random-means">3. What “random” really means here</h2>
+        <p>Mathematicians talk about <em>algorithmic randomness</em>. A sequence looks random if it cannot be compressed by a shorter description. Your thoughts usually compress well: they borrow from categories, prototypes, and stories you already have. When you try to be random, you often fail predictable tests. Human “random” tends to over‑avoid runs (people underproduce streaks like HHHHH in coin flip guesses) and to cluster around recency and salience.</p>
+        <div class="callout"><strong>Try it:</strong> write 200 digits that you claim are random. Now run a compressor on the string. If it shrinks, your digits had patterns you did not notice. Your mind protects you from entropy. That is its job.</div>
+
+        <h2 id="brains-as-gm">4. Brains as generative models</h2>
+        <p>A compact picture of modern neuroscience: the brain continually predicts the next sensory input, then updates when the world disagrees. This is often called <em>predictive processing</em> or the <em>free energy</em> view. In symbols:</p>
+        <p>$$\text{posterior} \propto \text{prior} \times \text{likelihood}$$</p>
+        <p>You carry priors learned from life. Perception and thought are inferences that reconcile those priors with incoming data. Creativity is the same engine running off‑distribution, with more latitude and more search.</p>
+        <div class="callout"><strong>Practical knob:</strong> arousal, attention, curiosity, caffeine, mood, and context change how tight your priors are. Looser priors widen the search space and make unusual combinations more likely.</div>
+
+        <h2 id="new-face">5. The “new face you cannot quite invent” experiment</h2>
+        <p>Close your eyes and conjure a face that has never existed. You will feel your visual system snapping to familiar axes: eye spacing, nose width, hairline shape, skin texture. Computer vision calls this low‑dimensional <em>face space</em>. New faces are often linear blends of known faces. That is why your “alien” still looks suspiciously Earthlike. The brain’s ventral stream leans on feature codes learned from the statistics of the world.</p>
+        <blockquote><strong>Takeaway</strong>: what you call spontaneity is usually <strong>structured recombination</strong> along learned feature directions.</blockquote>
+
+        <h2 id="deep-nets">6. Deep nets as a mirror</h2>
+        <p>Large models write poems and paint images that look novel. Under the hood they optimize a probability model over tokens or pixels. Each parameter is a small piece of pattern memory. This is why human creativity and model output feel parallel. In both cases, there is:</p>
+        <ul>
+          <li>a vast library of features,</li>
+          <li>a search over combinations,</li>
+          <li>and a scoring function that prefers coherent results.</li>
+        </ul>
+        <p>People add two extra loops that matter: <strong>metacognition</strong> (you can think about your own thinking) and <strong>values</strong> (you decide what is worth producing). The mirror is real, but it is not perfect.</p>
+
+        <h2 id="toy-model">7. A toy model of “random thought”</h2>
+        <p>Imagine memory as a graph. Nodes are traces, edges are associations. Thinking is a biased random walk:</p>
+        <ul>
+          <li>Start at the current context node $c$.</li>
+          <li>Jump to a neighbor with probability proportional to edge weight and priming.</li>
+          <li>Occasionally jump farther with small probability $\epsilon$ to simulate distraction, sensation, or noise.</li>
+        </ul>
+        <p>Even with noise, the next step depends on where you were. So the conditional probability $P(\text{next} \,|\, \text{history})$ is not independent. That dependence is the fingerprint of pattern. If you log your words over a minute, you will see semantic drift along meaningful lines: lamp → desk → study → exam → relief. A purely random process would not cluster like that.</p>
+
+        <h2 id="emotion">8. Emotion and the chemistry of meaning</h2>
+        <p>Falling in love, heartbreak, awe, grief. These states ride on neurotransmitters and circuit motifs. Dopamine tracks prediction errors and drives learning. Oxytocin tunes trust and bonding. Serotonin links to mood and patience. None of this cheapens the experience. It shows you why it hits as hard as it does, and why certain contexts amplify it. You are not replacing poetry with plumbing. You are discovering the pipes that let poetry flow.</p>
+        <blockquote><strong>Human side note</strong>: explain a hug by ions and you still want the hug. Explanation is not erasure. Meaning survives the microscope.</blockquote>
+
+        <h2 id="randomness">9. Where true randomness could enter</h2>
+        <p>Neurons are noisy at the ion channel level. Networks amplify or damp that noise depending on state. Some theorists argue for quantum contributions. Even if some noise is truly random, that does not create will by itself. Randomness without structure is just a glitch. <strong>Useful creativity is structured search plus a little turbulence</strong>, not turbulence alone.</p>
+
+        <h2 id="experiments">10. Small experiments you can run today</h2>
+        <ol>
+          <li><strong>The one minute timer</strong>. Every 20 seconds write the first word you think of. Draw arrows between them. Notice the themed clusters and returns.</li>
+          <li><strong>Semantic walk</strong>. Start from “banana”. Write ten words by association only. Now start from “justice”. Compare the geometry of the two walks.</li>
+          <li><strong>Compression test</strong>. Generate 200 digits you claim are random. Check how many simple patterns show up (repeats, alternations, local runs).</li>
+          <li><strong>Priming flip</strong>. Read a short list: ocean, blue, salt, wave, gull. Now do the one minute timer. Your first few words will tilt maritime. That tilt is your priors in action.</li>
+        </ol>
+
+        <h2 id="useful">11. How to use this in real life</h2>
+        <ul>
+          <li>If you want new ideas, <strong>change the graph</strong>. Expose yourself to new domains, not just more of the same feed.</li>
+          <li>If you want depth, <strong>tighten the priors</strong>. Focus, reduce noise, and climb the hill of one concept until it yields something precise.</li>
+          <li>If you want surprising combinations, <strong>loosen the priors</strong>. Walk farther in the graph before judging.</li>
+          <li>If you want meaning, <strong>attach values</strong>. Decide what counts as a good answer before you start searching.</li>
+        </ul>
+
+        <h2 id="closing">12. Closing</h2>
+        <p>You can say that a mother’s hug is spikes and synapses. You can be correct. The hug still matters. The chemistry explains the <em>how</em>, not the <em>why</em>. Meaning lives in the patterns that survive prediction, in the commitments you keep, in the stories you endorse when no one is looking. The wonder is that matter can host any of this at all.</p>
+        <blockquote><strong>One sentence to remember</strong>: not pure randomness, but an astonishing engine of recombinative order that feels like freedom from the inside.</blockquote>
+
+        <hr class="sep" />
+
+        <section class="refs" id="refs">
+          <h2>Notes and references (selective)</h2>
+          <ol>
+            <li>Clark, A. (2013). Whatever next? Predictive brains, situated agents, and the future of cognitive science. <em>Behavioral and Brain Sciences, 36</em>, 181–204.</li>
+            <li>Fisher, H., Aron, A., & Brown, L. L. (2005). Romantic love: an fMRI study of a neural mechanism for mate choice. <em>Journal of Comparative Neurology, 493</em>(1), 58–62.</li>
+            <li>Friston, K. (2010). The free‑energy principle: a unified brain theory. <em>Nature Reviews Neuroscience, 11</em>, 127–138.</li>
+            <li>Herculano‑Houzel, S. (2009). The human brain in numbers: a linearly scaled‑up primate brain. <em>Frontiers in Human Neuroscience, 3</em>, 31.</li>
+            <li>Kaplan, J., McCandlish, S., Henighan, T., et al. (2020). Scaling laws for neural language models. <em>arXiv:2001.08361</em>.</li>
+            <li>Lake, B. M., Ullman, T., Tenenbaum, J., & Gershman, S. (2017). Building machines that learn and think like people. <em>Behavioral and Brain Sciences, 40</em>, e253.</li>
+            <li>Penrose, R., & Hameroff, S. (2014). Consciousness in the universe: a review of the ‘Orch OR’ theory. <em>Physics of Life Reviews, 11</em>(1), 39–78.</li>
+            <li>Turk, M., & Pentland, A. (1991). Eigenfaces for recognition. <em>Journal of Cognitive Neuroscience, 3</em>(1), 71–86.</li>
+            <li>Rieke, F., Warland, D., de Ruyter van Steveninck, R., & Bialek, W. (1996). <em>Spikes: Exploring the Neural Code</em>. MIT Press.</li>
+          </ol>
+        </section>
+
+        <footer class="footer">
+          <div>© <span id="year"></span> Tarun Kumar Mahato · Licensed for personal distribution. Feel free to link.</div>
+          <div>Want to discuss or cite? Email: <a href="mailto:tarun@example.com">tarun@example.com</a> (edit this).</div>
+        </footer>
+      </article>
+    </main>
+  </div>
+
+  <div class="floating-top"><a href="#top" title="Back to top">↑</a></div>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Theme toggle with localStorage
+    const themeBtn = document.getElementById('themeBtn');
+    const key = 'tp-theme';
+    function applyTheme(mode){
+      if(mode==='light'){ document.documentElement.style.colorScheme='light'; document.body.dataset.theme='light'; }
+      else if(mode==='dark'){ document.documentElement.style.colorScheme='dark'; document.body.dataset.theme='dark'; }
+      else{ document.documentElement.style.colorScheme='light dark'; delete document.body.dataset.theme; }
+    }
+    const saved = localStorage.getItem(key);
+    if(saved) applyTheme(saved);
+    themeBtn.addEventListener('click',()=>{
+      const next = (localStorage.getItem(key)==='dark') ? 'light' : 'dark';
+      localStorage.setItem(key,next); applyTheme(next);
+    });
+
+    // Robust Share/Copy handler with graceful fallbacks to avoid NotAllowedError
+    const shareBtn = document.getElementById('shareBtn');
+    const copyFallback = document.getElementById('copyFallback');
+    const copyInput = document.getElementById('copyInput');
+
+    async function shareOrCopy(url){
+      // 1) Prefer native share on supported browsers/devices
+      if(navigator.share){
+        try { await navigator.share({ title: document.title, url }); return 'shared'; } catch(e){ /* continue to other methods */ }
+      }
+      // 2) Try Clipboard API only when available & likely allowed
+      if(window.isSecureContext && navigator.clipboard && navigator.clipboard.writeText){
+        try { await navigator.clipboard.writeText(url); return 'copied'; } catch(e){ /* blocked by Permissions-Policy; continue */ }
+      }
+      // 3) Fallback to execCommand('copy') via offscreen textarea
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = url; ta.setAttribute('readonly','');
+        ta.style.position='fixed'; ta.style.top='-1000px'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.focus(); ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        if(ok) return 'copied';
+      } catch(e){ /* continue */ }
+      // 4) Final fallback: reveal manual copy UI
+      copyInput.value = url; copyFallback.style.display = 'block'; copyInput.focus(); copyInput.select();
+      return 'manual';
+    }
+
+    shareBtn.addEventListener('click', async (e)=>{
+      e.preventDefault();
+      const url = location.href;
+      const result = await shareOrCopy(url);
+      if(result==='shared'){ shareBtn.textContent = 'Shared!'; setTimeout(()=>shareBtn.textContent='Copy link', 1400); }
+      else if(result==='copied'){ shareBtn.textContent = 'Copied!'; setTimeout(()=>shareBtn.textContent='Copy link', 1400); }
+      else { shareBtn.textContent = 'Copy manually ↓'; setTimeout(()=>shareBtn.textContent='Copy link', 4000); }
+    });
+
+    // Build TOC from h2/h3
+    const tocList = document.getElementById('tocList');
+    const headings = [...document.querySelectorAll('#article h2, #article h3')];
+    const mkSlug = s=> s.toLowerCase().replace(/[^a-z0-9\s\-→]/g,'').replace(/\s+/g,'-');
+    headings.forEach((h,i)=>{
+      if(!h.id){ h.id = mkSlug(h.textContent) + '-' + i }
+      const a = document.createElement('a');
+      a.href = '#' + h.id; a.textContent = h.textContent;
+      if(h.tagName==='H3'){ const sm=document.createElement('small'); sm.textContent=' — subsection'; a.appendChild(sm); }
+      tocList.appendChild(a);
+    });
+
+    // Scrollspy
+    const links = [...tocList.querySelectorAll('a')];
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        const id = entry.target.getAttribute('id');
+        const link = links.find(l=> l.getAttribute('href') === '#' + id);
+        if(link){ link.classList.toggle('active', entry.isIntersecting) }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px', threshold: 0.01 });
+    headings.forEach(h=>obs.observe(h));
+
+    // --- Minimal self-tests (non-intrusive) ---
+    const testlog = document.getElementById('test-log');
+    function log(line){ testlog.textContent += (testlog.textContent? '\n':'') + line }
+    try {
+      // Test 1: mkSlug behavior
+      const slug = mkSlug('Hello → World!');
+      if(!slug.startsWith('hello-')) throw new Error('mkSlug failed');
+      log('✅ mkSlug basic transformation');
+    } catch(err){ log('❌ mkSlug test: ' + err.message) }
+
+    try {
+      // Test 2: TOC count equals headings count
+      const tocCount = tocList.querySelectorAll('a').length;
+      const headCount = headings.length;
+      if(tocCount !== headCount) throw new Error(`TOC mismatch (${tocCount} vs ${headCount})`);
+      log('✅ TOC mirrors headings count');
+    } catch(err){ log('⚠️ TOC test: ' + err.message) }
+
+    try {
+      // Test 3: Share handler existence and safe call path
+      if(typeof shareOrCopy !== 'function') throw new Error('shareOrCopy missing');
+      log('✅ shareOrCopy available');
+    } catch(err){ log('❌ Share function test: ' + err.message) }
+  </script>
+</body>
+</html>
